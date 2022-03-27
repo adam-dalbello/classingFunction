@@ -2,7 +2,7 @@
 Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate for each group.
 
 ```r
-classing_function <- function(x, dimension, metric) {
+classingFunction <- function(x, dimension, metric) {
   require(dplyr)
   require(rlang)
   vector1 <- x %>% select({{ dimension }}) %>% as.matrix() %>% as.vector()
