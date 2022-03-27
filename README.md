@@ -1,5 +1,5 @@
 # classingFunction
-Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregated metric for each group.
+Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of 2nd variable.
 
 ```r
 classingFunction <- function(.data, dimension, metric) {
