@@ -1,5 +1,5 @@
 # classingFunction
-Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of 2nd variable.
+Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a variable.
 
 ### Languages and Tools
 <div>
@@ -15,6 +15,7 @@ Groups a variable by its own quartiles (the thresholds for each group being p25,
 <br>
 <br>
 
+# Function
 ```r
 classingFunction <- function(.data, dimension, metric) {
   require(dplyr)
