@@ -2,12 +2,12 @@
 Groups a variable by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregated metric for each group.
 
 ```r
-classingFunction <- function(x, dimension, metric) {
+classingFunction <- function(.data, dimension, metric) {
   require(dplyr)
   require(rlang)
   
-  if (is.numeric( x %>% select({{ dimension }}) %>% as.matrix() )  )   {
-    vector1 <- x %>% select({{ dimension }}) %>% as.matrix()
+  if (is.numeric( .data %>% select({{ dimension }}) %>% as.matrix() )  )   {
+    vector1 <- .data %>% select({{ dimension }}) %>% as.matrix()
     vector2 <- if_else(vector1 <= quantile(vector1, prob = 0.25), '> p0, <= p25',
                        if_else(vector1 <= quantile(vector1, prob = 0.50), '> p25, <= p50',
                                if_else(vector1 <= quantile(vector1, prob = 0.75), '> p50, <= p75', '> p75, <= p99')
@@ -17,7 +17,7 @@ classingFunction <- function(x, dimension, metric) {
       rename(dimension_class := '.') 
       
     
-    bind_cols(x, vector2) %>% 
+    bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
       summarise(mean = mean({{ metric }}), .groups = 'drop')
   } else {
