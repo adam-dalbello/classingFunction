@@ -26,15 +26,15 @@ classingFunction <- function(.data, dimension, metric) {
   
   if (is.matrix(.data)) {
     .data <- as_tibble(.data) %>% 
-      mutate({{ dimension }} := as.numeric({{ dimension }}) )
+      mutate({{ dimension }} := as.numeric( {{ dimension }} )  )
   }
   
   if (is.data.frame(.data)) {
     .data <- as_tibble(.data)
   }
   
-  if (is.numeric(.data %>% select({{ dimension }}) %>% as.matrix() )  )   {
-    vector1 <- .data %>% select({{ dimension }}) %>% as.matrix()
+  if (is.numeric(.data %>% select( {{ dimension }} ) %>% as.matrix() )  )   {
+    vector1 <- .data %>% select( {{ dimension }} ) %>% as.matrix()
     thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
     vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
                        if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
@@ -47,7 +47,7 @@ classingFunction <- function(.data, dimension, metric) {
     
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
-      summarise(mean = mean({{ metric }}), .groups = 'drop')
+      summarise(mean = mean( {{ metric }} ), .groups = 'drop')
   } else {
     stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
   }
