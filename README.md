@@ -41,7 +41,6 @@ classingFunction <- function(.data, dimension, metric) {
                        ) %>%
       as_tibble() %>%
       rename(dimension_class := 'value') 
-      
     
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
@@ -49,5 +48,6 @@ classingFunction <- function(.data, dimension, metric) {
   } else {
     stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
   }
+  
 }
 ```
