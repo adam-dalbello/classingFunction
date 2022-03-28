@@ -1,5 +1,5 @@
 # classingFunction
-Groups a variable ('dimension') by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a variable ('metric').
+Groups a ```dimension``` by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a ```metric```. ```dimension``` must be either an integer or numeric in class.
 
 ### Languages and Tools
 <div>
