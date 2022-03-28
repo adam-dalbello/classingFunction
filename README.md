@@ -25,15 +25,14 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
   require(rlang)
   
   if (is.matrix(.data)) {
-    .data <- as_tibble(.data) %>% 
-      mutate({{ dimension }} := as.numeric( {{ dimension }} )  )
+    .data <- as_tibble(.data)
   }
   
   if (is.data.frame(.data)) {
     .data <- as_tibble(.data)
   }
   
-  if (is.numeric(.data %>% select( {{ dimension }} ) %>% as.matrix() )  )   {
+  if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )   )     {
     vector1 <- .data %>% select( {{ dimension }} ) %>% as.matrix()
     thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = na.rm)
     vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
@@ -48,21 +47,23 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
       summarise(
+        metric_min = min( {{ metric }}, na.rm = na.rm),
         metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
         metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
         metric_mean = mean( {{ metric }}, .groups = 'drop'),
-        metric_p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
+        metric_P75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
+        metric_max = max( {{ metric }}, na.rm = na.rm)
       )
   } else {
-    stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
+    stop('Pass numeric dimension and metric variables. Only numerical data permissable.')
   }
   
 }
 
-#> # A tibble: 3 x 5
-#>   dimension_class metric_p25 metric_p50 metric_mean metric_p75
-#>   <chr>                <dbl>      <dbl>       <dbl>      <dbl>
-#> 1 > p0, <= p25             0          0        0             0
-#> 2 > p50, <= p75            1          2        1.65          2
-#> 3 > p75, <= p100           3          3        3             3
+# # A tibble: 3 x 7
+#   dimension_class metric_min metric_p25 metric_p50 metric_mean metric_P75 metric_max
+#   <chr>                <dbl>      <dbl>      <dbl>       <dbl>      <dbl>      <dbl>
+# 1 > p0, <= p25             0          0          0        0             0          0
+# 2 > p50, <= p75            1          1          2        1.65          2          2
+# 3 > p75, <= p100           3          3          3        3             3          3
 ```
