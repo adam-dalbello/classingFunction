@@ -51,7 +51,7 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
         metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
         metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
         metric_mean = mean( {{ metric }}, .groups = 'drop'),
-        metric_P75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
+        metric_p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
       )
   } else {
     stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
@@ -59,5 +59,10 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
   
 }
 
-
+#> # A tibble: 3 x 5
+#>   dimension_class metric_p25 metric_p50 metric_mean metric_p75
+#>   <chr>                <dbl>      <dbl>       <dbl>      <dbl>
+#> 1 > p0, <= p25             0          0        0             0
+#> 2 > p50, <= p75            1          2        1.65          2
+#> 3 > p75, <= p100           3          3        3             3
 ```
