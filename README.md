@@ -1,6 +1,9 @@
 # classingFunction
 Groups a ```dimension``` by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a ```metric```. ```dimension``` must be either an integer or numeric in class.
 
+Matrices and dataframes will be changed to tibbles. Variables passed as ```dimension``` will be cast as numeric by ```as.numeric()```.
+
+
 ### Languages and Tools
 <div>
   <img src="https://github.com/devicons/devicon/blob/master/icons/r/r-original.svg" title="r" alt="r" width="70" height="70"/>&nbsp;
