@@ -21,22 +21,32 @@ classingFunction <- function(.data, dimension, metric) {
   require(dplyr)
   require(rlang)
   
-  if (is.numeric( .data %>% select({{ dimension }}) %>% as.matrix() )  )   {
+  if (is.matrix(.data)) {
+    .data <- as_tibble(.data) %>% 
+      mutate({{ dimension }} := as.numeric({{ dimension }}) )
+  }
+  
+  if (is.data.frame(.data)) {
+    .data <- as_tibble(.data)
+  }
+  
+  if (is.numeric(.data %>% select({{ dimension }}) %>% as.matrix() )  )   {
     vector1 <- .data %>% select({{ dimension }}) %>% as.matrix()
-    vector2 <- if_else(vector1 <= quantile(vector1, prob = 0.25), '> p0, <= p25',
-                       if_else(vector1 <= quantile(vector1, prob = 0.50), '> p25, <= p50',
-                               if_else(vector1 <= quantile(vector1, prob = 0.75), '> p50, <= p75', '> p75, <= p99')
+    thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
+    vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
+                       if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
+                               if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100')
                                )
                        ) %>%
-      as.data.frame() %>%
-      rename(dimension_class := '.') 
+      as_tibble() %>%
+      rename(dimension_class := 'value') 
       
     
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
       summarise(mean = mean({{ metric }}), .groups = 'drop')
   } else {
-    print('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
+    stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
   }
 }
 ```
