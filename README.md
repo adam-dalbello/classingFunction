@@ -47,10 +47,17 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
     
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
-      summarise(mean = mean( {{ metric }} ), .groups = 'drop')
+      summarise(
+        metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
+        metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
+        metric_mean = mean( {{ metric }}, .groups = 'drop'),
+        metric_P75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
+      )
   } else {
     stop('Cast the dimension variable to either a numeric or integer. Only numerical data is allowed')
   }
   
 }
+
+
 ```
