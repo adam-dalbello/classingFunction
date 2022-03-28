@@ -35,7 +35,8 @@ classingFunction <- function(.data, dimension, metric) {
     thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
     vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
                        if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
-                               if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100')
+                               if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100'
+                                       )
                                )
                        ) %>%
       as_tibble() %>%
