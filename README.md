@@ -20,7 +20,7 @@ Matrices and dataframes will be changed to tibbles. Variables passed as ```dimen
 
 # Function
 ```r
-classingFunction <- function(.data, dimension, metric) {
+classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
   require(dplyr)
   require(rlang)
   
@@ -35,7 +35,7 @@ classingFunction <- function(.data, dimension, metric) {
   
   if (is.numeric(.data %>% select( {{ dimension }} ) %>% as.matrix() )  )   {
     vector1 <- .data %>% select( {{ dimension }} ) %>% as.matrix()
-    thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
+    thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = na.rm)
     vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
                        if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
                                if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100'
