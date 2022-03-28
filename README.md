@@ -20,7 +20,7 @@ Matrices and dataframes will be changed to tibbles. Variables passed as ```dimen
 
 # Function
 ```r
-classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
+segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
   require(dplyr)
   require(rlang)
   
@@ -47,6 +47,7 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
       summarise(
+        observations = n(),
         metric_min = min( {{ metric }}, na.rm = na.rm),
         metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
         metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
@@ -60,10 +61,10 @@ classingFunction <- function(.data, dimension, metric, na.rm = TRUE) {
   
 }
 
-# # A tibble: 3 x 7
-#   dimension_class metric_min metric_p25 metric_p50 metric_mean metric_P75 metric_max
-#   <chr>                <dbl>      <dbl>      <dbl>       <dbl>      <dbl>      <dbl>
-# 1 > p0, <= p25             0          0          0        0             0          0
-# 2 > p50, <= p75            1          1          2        1.65          2          2
-# 3 > p75, <= p100           3          3          3        3             3          3
+# # A tibble: 3 x 8
+#   dimension_class observations metric_min metric_p25 metric_p50 metric_mean metric_P75 metric_max
+#   <chr>                  <int>      <dbl>      <dbl>      <dbl>       <dbl>      <dbl>      <dbl>
+# 1 > p0, <= p25            6317          0          0          0        0             0          0
+# 2 > p50, <= p75           4185          1          1          2        1.65          2          2
+# 3 > p75, <= p100          1213          3          3          3        3             3          3
 ```
