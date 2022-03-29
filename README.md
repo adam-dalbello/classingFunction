@@ -32,7 +32,7 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
     .data <- as_tibble(.data)
   }
   
-  if (is.numeric(.data %>% pull( {{ dimension }}, {{ metric }} )  )    )      {
+  if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )  )   {
     vector1 <- .data %>% pull( {{ dimension }} )
     thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = na.rm)
     vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
