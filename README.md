@@ -52,7 +52,7 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
         metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
         metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
         metric_mean = mean( {{ metric }}, .groups = 'drop'),
-        metric_P75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
+        metric_p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
         metric_max = max( {{ metric }}, na.rm = na.rm)
       )
   } else {
@@ -63,7 +63,7 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
 
 
 # # A tibble: 3 x 8
-#   dimension_class observations metric_min metric_p25 metric_p50 metric_mean metric_P75 metric_max
+#   dimension_class observations metric_min metric_p25 metric_p50 metric_mean metric_p75 metric_max
 #   <chr>                  <int>      <dbl>      <dbl>      <dbl>       <dbl>      <dbl>      <dbl>
 # 1 > p0, <= p25            6317          0          0          0        0             0          0
 # 2 > p50, <= p75           4185          1          1          2        1.65          2          2
