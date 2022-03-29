@@ -18,19 +18,21 @@ Matrices and dataframes will be changed to tibbles. Variables passed as ```dimen
 <br>
 <br>
 
+### Arguments
+| Argument | Description |
+| --- | --- |
+| ```.data``` | A data frame, tibble, matrix, or data.frame to be passed. It will be cast as a tibble. |
+| ```dimension``` | The variable/column/field you want to segment. |
+| ```metric``` | The variable/column/field you want to see distributions for. |
+| ```na.rm``` | Determines if we want to include NA values. By default ignores NA values. |
+
 # Function
 ```r
 segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
   require(dplyr)
   require(rlang)
   
-  if (is.matrix(.data)) {
-    .data <- as_tibble(.data)
-  }
-  
-  if (is.data.frame(.data)) {
-    .data <- as_tibble(.data)
-  }
+  .data <- as_tibble(.data)
   
   if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )  )   {
     vector1 <- .data %>% pull( {{ dimension }} )
@@ -56,7 +58,7 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
         metric_max = max( {{ metric }}, na.rm = na.rm)
       )
   } else {
-    stop('Pass numeric dimension and metric variables. Only numerical data permissable.')
+    stop('Pass numeric dimension and metric variables. Only numeric data permissable.')
   }
   
 }
