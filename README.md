@@ -21,10 +21,10 @@ Matrices and dataframes will be changed to tibbles. Variables passed as ```dimen
 ### Arguments
 | Argument | Description |
 | --- | --- |
-| ```.data``` | A data frame, tibble, matrix, or data.frame to be passed. It will be cast as a tibble. |
-| ```dimension``` | The variable/column/field you want to segment. |
-| ```metric``` | The variable/column/field you want to see distributions for. |
-| ```na.rm``` | Determines if we want to include NA values. By default ignores NA values. |
+| ```.data``` | A data frame, tibble, matrix, or data table. Will be cast as a tibble internally. |
+| ```dimension``` | The variable/column/field to segment. |
+| ```metric``` | The variable/column/field distributions will be printed out for. |
+| ```na.rm``` | Determines if NA values are to be included. By default ignores NA values. |
 
 # Function
 ```r
