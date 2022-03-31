@@ -53,7 +53,7 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
         metric_min = min( {{ metric }}, na.rm = na.rm),
         metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
         metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
-        metric_mean = mean( {{ metric }}, .groups = 'drop'),
+        metric_mean = mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
         metric_p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
         metric_max = max( {{ metric }}, na.rm = na.rm)
       )
