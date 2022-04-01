@@ -1,7 +1,7 @@
 # segmentedDistributions Function
-Groups a ```dimension``` by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a ```metric```. ```dimension``` must be either an integer or numeric in class.
+Groups a `dimension` by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a `metric`. `dimension` must be either an integer or numeric in class.
 
-Matrices, data.tables and dataframes will be cast as tibbles. Variables passed through ```dimension``` and ```metric``` must be numeric or integers.
+Matrices, data.tables and dataframes will be cast as tibbles. Variables passed through `dimension` and `metric` must be numeric or integers.
 
 
 ### Languages and Tools
@@ -21,10 +21,10 @@ Matrices, data.tables and dataframes will be cast as tibbles. Variables passed t
 ### Arguments
 | Argument | Description |
 | --- | --- |
-| ```.data``` | A data frame, tibble, matrix, or data table. Will be cast as a tibble internally. |
-| ```dimension``` | The variable/column/field to segment. |
-| ```metric``` | The variable/column/field distributions will be printed out for. |
-| ```na.rm``` | Determines if NA values are to be included. By default ignores NA values. |
+| `.data` | A data frame, tibble, matrix, or data table. Will be cast as a tibble internally. |
+| `dimension` | The variable/column/field to segment. |
+| `metric` | The variable/column/field distributions will be printed out for. |
+| `na.rm` | Determines if NA values are to be included. By default ignores NA values. |
 
 # Function
 ```r
