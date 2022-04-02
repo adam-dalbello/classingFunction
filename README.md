@@ -45,18 +45,18 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
                                )
                        ) %>%
       as_tibble() %>%
-      rename(dimension_class := 'value') 
+      rename('dimension_class' = 'value') 
     
     bind_cols(.data, vector2) %>% 
       group_by(dimension_class) %>% 
       summarise(
         observations = n(),
-        metric_min = min( {{ metric }}, na.rm = na.rm),
-        metric_p25 = quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
-        metric_p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
-        metric_mean = mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
-        metric_p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
-        metric_max = max( {{ metric }}, na.rm = na.rm)
+        !!paste0(as_name(enquo(metric)), '_min') := min( {{ metric }}, na.rm = na.rm),
+        !!paste0(as_name(enquo(metric)), '_p25') := quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
+        !!paste0(as_name(enquo(metric)), '_p50') := quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
+        !!paste0(as_name(enquo(metric)), '_mean') := mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
+        !!paste0(as_name(enquo(metric)), '_p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
+        !!paste0(as_name(enquo(metric)), '_max') := max( {{ metric }}, na.rm = na.rm)
       )
   } else {
     stop('Pass numeric dimension and metric variables. Only numeric data permissable.')
@@ -66,9 +66,9 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
 
 
 # # A tibble: 3 x 8
-#   dimension_class observations metric_min metric_p25 metric_p50 metric_mean metric_p75 metric_max
-#   <chr>                  <int>      <dbl>      <dbl>      <dbl>       <dbl>      <dbl>      <dbl>
-# 1 > p0, <= p25            6317          0          0          0        0             0          0
-# 2 > p50, <= p75           4185          1          1          2        1.65          2          2
-# 3 > p75, <= p100          1213          3          3          3        3             3          3
+#   dimension_class observations levels_completed_min levels_completed_p25 levels_completed_p50 levels_completed_mean levels_completed_p75 levels_completed_max
+#   <chr>                  <int>                <dbl>                <dbl>                <dbl>                 <dbl>                <dbl>                <dbl>
+# 1 > p0, <= p25            6317                    0                    0                    0                     0                    0                    0
+# 2 > p50, <= p75           4185                    1                    1                    2                  1.65                    2                    2
+# 3 > p75, <= p100          1213                    3                    3                    3                     3                    3                    3
 ```
