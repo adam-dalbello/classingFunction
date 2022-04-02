@@ -2,7 +2,8 @@
 Groups a `dimension` by its own quartiles (the thresholds for each group being p25, p50 and p75) then outputs an aggregate of a `metric`. `dimension` must be either an integer or numeric in class.
 
 Matrices, data.tables and dataframes will be cast as tibbles. Variables passed through `dimension` and `metric` must be numeric or integers.
-
+<br>
+<br>
 
 ### Languages and Tools
 <div>
