@@ -44,10 +44,10 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
                                if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100'
                                )
                        )
-               ) %>%
+               ) %>% 
       as_tibble()
     
-    lhs_names <- function(measure) {
+    lhsNames <- function(measure) {
       paste0(as_name(enquo(metric)), '_', measure)
     }
     
@@ -55,12 +55,12 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
       group_by(value) %>% 
       summarise(
         observations = n(),
-        !!lhs_names('min') := min( {{ metric }}, na.rm = na.rm),
-        !!lhs_names('p25') := quantile( {{ metric }}, prob = 0.25, na.rm = na.rm),
-        !!lhs_names('p50') := quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
-        !!lhs_names('mean') := mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
-        !!lhs_names('p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
-        !!lhs_names('max') := max( {{ metric }}, na.rm = na.rm)
+        !!lhsNames('min') := min( {{ metric }}, na.rm = na.rm),
+        !!lhsNames('p25') := quantile( {{ metric }}, prob = 0.25, na.rm = na.rm),
+        !!lhsNames('p50') := quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
+        !!lhsNames('mean') := mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
+        !!lhsNames('p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
+        !!lhsNames('max') := max( {{ metric }}, na.rm = na.rm)
       ) %>% 
       rename(!!paste0(as_name(enquo(dimension)), '_class') := 'value')
       
