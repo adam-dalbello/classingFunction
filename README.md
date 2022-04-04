@@ -47,16 +47,37 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
                ) %>%
       as_tibble()
     
+segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
+  require(dplyr)
+  require(rlang)
+  
+  .data <- as_tibble(.data)
+  
+  if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )  )   {
+    vector1 <- .data %>% pull( {{ dimension }} )
+    thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = na.rm)
+    vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
+                       if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
+                               if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100'
+                               )
+                       )
+               ) %>%
+      as_tibble()
+    
+    lhs_names <- function(measure) {
+      paste0(as_name(enquo(metric)), measure)
+    }
+    
     bind_cols(.data, vector2) %>% 
       group_by(value) %>% 
       summarise(
         observations = n(),
-        !!paste0(as_name(enquo(metric)), '_min') := min( {{ metric }}, na.rm = na.rm),
-        !!paste0(as_name(enquo(metric)), '_p25') := quantile( {{metric }}, prob = 0.25, na.rm = na.rm),
-        !!paste0(as_name(enquo(metric)), '_p50') := quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
-        !!paste0(as_name(enquo(metric)), '_mean') := mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
-        !!paste0(as_name(enquo(metric)), '_p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
-        !!paste0(as_name(enquo(metric)), '_max') := max( {{ metric }}, na.rm = na.rm)
+        !!lhs_names('_min') := min( {{ metric }}, na.rm = na.rm),
+        !!lhs_names('_p25') := quantile( {{ metric }}, prob = 0.25, na.rm = na.rm),
+        !!lhs_names('_p50') := quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
+        !!lhs_names('_mean') := mean( {{ metric }}, .groups = 'drop', na.rm = na.rm),
+        !!lhs_names('_p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
+        !!lhs_names('_max') := max( {{ metric }}, na.rm = na.rm)
       ) %>% 
       rename(!!paste0(as_name(enquo(dimension)), '_class') := 'value')
       
