@@ -70,10 +70,10 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
   
 }
 
-# # A tibble: 3 x 8
-#   levels_completed_class observations levels_completed_min levels_completed_p25 levels_completed_p50 levels_completed_mean levels_completed_p75 levels_completed_max
-#   <chr>                         <int>                <dbl>                <dbl>                <dbl>                 <dbl>                <dbl>                <dbl>
-# 1 > p0, <= p25                   6317                    0                    0                    0                     0                    0                    0
-# 2 > p50, <= p75                  4185                    1                    1                    2                  1.65                    2                    2
-# 3 > p75, <= p100                 1213                    3                    3                    3                     3                    3                    3
+#> # A tibble: 3 x 8
+#>   levels_completed_class observations levels_completed_min levels_completed_p25 levels_completed_p50 levels_completed_mean levels_completed_p75 levels_completed_max
+#>   <chr>                         <int>                <dbl>                <dbl>                <dbl>                 <dbl>                <dbl>                <dbl>
+#> 1 > p0, <= p25                   6317                    0                    0                    0                     0                    0                    0
+#> 2 > p50, <= p75                  4185                    1                    1                    2                  1.65                    2                    2
+#> 3 > p75, <= p100                 1213                    3                    3                    3                     3                    3                    3
 ```
