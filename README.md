@@ -47,8 +47,8 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
                ) %>% 
       as_tibble()
     
-    lhsNames <- function(variable, class_or_measure) {
-      paste0(as_name(enquo(variable)), '_', class_or_measure)
+    lhsNames <- function(variable, measure) {
+      paste0(as_name(enquo(variable)), '_', measure)
     }
     
     bind_cols(.data, vector2) %>% 
