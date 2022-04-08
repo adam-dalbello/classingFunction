@@ -30,7 +30,7 @@ Matrices, data.tables and dataframes will be cast as tibbles. Variables passed t
 
 # Function
 ```r
-segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
+segmentedDistributions <- function(.data, dimension, metric, date = NULL, na.rm = TRUE) {
   require(dplyr)
   require(rlang)
   
@@ -39,9 +39,10 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
   if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )  )   {
     vector1 <- .data %>% pull( {{ dimension }} )
     thresholds <- quantile(vector1, probs = c(0.25, 0.5, 0.75), na.rm = na.rm)
-    vector2 <- if_else(vector1 <= thresholds[[1]], '> p0, <= p25',
-                       if_else(vector1 <= thresholds[[2]], '> p25, <= p50',
-                               if_else(vector1 <= thresholds[[3]], '> p50, <= p75', '> p75, <= p100'
+    vector2 <- if_else(vector1 <= thresholds[[1]], paste0('p0 < ', as_label(enquo(dimension)), ' <= p25'),
+                       if_else(vector1 <= thresholds[[2]], paste0('p25 < ', as_label(enquo(dimension)), ' <= p50'),
+                               if_else(vector1 <= thresholds[[3]], paste0('p50 < ', as_label(enquo(dimension)), ' <= p75'),
+                                       paste0('p75 < ', as_label(enquo(dimension)), ' <= p100')
                                )
                        )
                ) %>% 
@@ -62,10 +63,35 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
         !!lhsNames( {{ metric }}, 'p75') := quantile( {{ metric }}, prob = 0.75, na.rm = na.rm),
         !!lhsNames( {{ metric }}, 'max') := max( {{ metric }}, na.rm = na.rm)
       ) %>% 
-      rename(!!lhsNames( {{ dimension }}, 'class') := 'value')
+      rename(!!lhsNames( {{ dimension }}, 'class') := 'value') %>%
+      print()
       
   } else {
     stop('Pass numeric dimension and metric variables. Only numeric data permissable.')
+  }
+  
+  if (length(.data %>% pull( {{ date }} )) > 0) {
+    bind_cols(.data, vector2) %>%
+      group_by( {{ date }}, value) %>% 
+      summarise(
+        p25 = quantile( {{ metric }}, prob = 0.25, na.rm = na.rm),
+        mean = mean( {{ metric }}, na.rm = na.rm),
+        p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
+        p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
+      ) %>%
+      rename('class' = 'value' ) %>% 
+      tidyr::pivot_longer(cols = c('p25', 'mean', 'p50', 'p75'), names_to = 'measure', values_to = as_name(enquo(metric))) %>% 
+      mutate(measure = factor(measure, levels = c('p25', 'mean', 'p50', 'p75'))) %>% 
+      ggplot2::ggplot(aes( {{ date }}, {{ metric }}, col = measure, group = measure)) +
+      geom_line() +
+      geom_point(alpha = 0.5, size = 1) +
+      facet_grid(. ~ class) +
+      theme(
+        panel.background = element_rect(fill = 'grey94'),
+        text = element_text(family = 'Segoe UI'),
+        strip.background.x = element_rect(fill = 'white')
+      ) +
+      ggtitle(paste(as_label(enquo(dimension)), 'Segmented', as_label(enquo(metric)), 'Distribution', by = ' '))
   }
   
 }
@@ -77,3 +103,5 @@ segmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE) {
 #> 2 > p50, <= p75                  4185                    1                    1                    2                  1.65                    2                    2
 #> 3 > p75, <= p100                 1213                    3                    3                    3                     3                    3                    3
 ```
+
+![segmented line plot white](https://user-images.githubusercontent.com/25012294/162504843-5a4615c2-0fd3-40c9-9eea-a0fd29b998f2.png)
