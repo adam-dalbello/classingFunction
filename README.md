@@ -82,9 +82,20 @@ segmentedDistributions <- function(.data, dimension, metric, date = NULL, na.rm 
         p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
       ) %>%
       rename('class' = 'value' ) %>% 
-      tidyr::pivot_longer(cols = c('p25', 'mean', 'p50', 'p75'), names_to = 'measure', values_to = as_name(enquo(metric))) %>% 
+      tidyr::pivot_longer(
+        cols = c('p25', 'mean', 'p50', 'p75'),
+        names_to = 'measure',
+        values_to = as_name(enquo(metric))
+      ) %>% 
       mutate(measure = factor(measure, levels = c('p25', 'mean', 'p50', 'p75'))) %>% 
-      ggplot2::ggplot(aes( {{ date }}, {{ metric }}, col = measure, group = measure)) +
+      ggplot2::ggplot(
+        aes( 
+          {{ date }}, 
+          {{ metric }}, 
+          col = measure, 
+          group = measure
+        )
+      ) +
       geom_line() +
       geom_point(alpha = 0.5, size = 1) +
       facet_grid(. ~ class) +
@@ -93,7 +104,15 @@ segmentedDistributions <- function(.data, dimension, metric, date = NULL, na.rm 
         text = element_text(family = 'Segoe UI'),
         strip.background.x = element_rect(fill = 'white')
       ) +
-      ggtitle(paste(as_label(enquo(dimension)), 'Segmented', as_label(enquo(metric)), 'Distribution', by = ' '))
+      ggtitle(
+        paste(
+          as_label(enquo(dimension)), 
+          'Segmented', 
+          as_label(enquo(metric)), 
+          'Distribution', 
+          by = ' '
+        )
+      )
   }
   
 }
