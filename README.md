@@ -81,7 +81,7 @@ segmentedDistributions <- function(.data, dimension, metric, date = NULL, na.rm 
         p50 = quantile( {{ metric }}, prob = 0.50, na.rm = na.rm),
         p75 = quantile( {{ metric }}, prob = 0.75, na.rm = na.rm)
       ) %>%
-      rename('class' = 'value' ) %>% 
+      rename('class' = 'value') %>% 
       tidyr::pivot_longer(
         cols = c('p25', 'mean', 'p50', 'p75'),
         names_to = 'measure',
