@@ -23,7 +23,7 @@ Matrices, data.tables and dataframes will be cast as tibbles. Variables passed t
 <br>
 <br>
 
-### Arguments
+# Arguments
 | Argument | Description |
 | --- | --- |
 | `.data` | A data frame, tibble, matrix, or data table. Will be cast as a tibble internally. |
