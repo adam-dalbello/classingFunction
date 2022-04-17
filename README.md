@@ -21,6 +21,7 @@ Matrices, data.tables and dataframes will be cast as tibbles. Variables passed t
 </div>
 <br>
 <br>
+<br>
 
 ### Arguments
 | Argument | Description |
