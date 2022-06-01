@@ -52,15 +52,15 @@ decileSegmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE)
                if_else(vector1 <= thresholds[[8]], paste0('p70 < ', as_label(enquo(dimension)), ' <= p80'),
                if_else(vector1 <= thresholds[[9]], paste0('p80 < ', as_label(enquo(dimension)), ' <= p90'),
                                                    paste0('p90 < ', as_label(enquo(dimension)), ' <= max')
-                               )
-                              )
-                             )
-                            )
-                           )
-                          )
-                         )
-                        )
-                       ) %>% 
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ) %>% 
       as_tibble()
     
     lhsNames <- function(variable, measure) {
