@@ -39,7 +39,7 @@ decileSegmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE)
   
   if (is.numeric(.data %>% select( {{ dimension }}, {{ metric }} ) %>% as.matrix() )  )   {
     vector1 <- .data %>% pull( {{ dimension }} )
-    thresholds <- quantile(vector1, probs = c(0.10, 0.20, 0.30, 0.40, 0.5, 0.60, 0.70, 0.80, 0.90), na.rm = na.rm)
+    thresholds <- quantile(vector1, probs = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90), na.rm = na.rm)
     vector2 <- if_else(vector1 <= thresholds[[1]], paste0('min <= ', as_label(enquo(dimension)), ' <= p10'),
                if_else(vector1 <= thresholds[[2]], paste0('p10 < ', as_label(enquo(dimension)), ' <= p20'),
                if_else(vector1 <= thresholds[[3]], paste0('p20 < ', as_label(enquo(dimension)), ' <= p30'),
@@ -59,22 +59,21 @@ decileSegmentedDistributions <- function(.data, dimension, metric, na.rm = TRUE)
         )
       )
     ) %>% 
-      as_tibble()
+    as_tibble()
     
     lhsNames <- function(variable, measure) {
       paste0(as_name(enquo(variable)), '_', measure)
     }
     
+    print(thresholds)
+    
     bind_cols(.data, vector2) %>% 
       group_by(value) %>% 
       summarise(
         observations = n(),
-        !!lhsNames( {{ metric }}, 'mean') := paste0(round((mean( {{ metric }}, .groups = 'drop', na.rm = na.rm) * 100), 2), '%')
+        !!lhsNames( {{ metric }}, 'mean') := round(mean( {{ metric }}, .groups = 'drop', na.rm = na.rm), 4)
       ) %>% 
-      rename(!!lhsNames( {{ dimension }}, 'range (pxx representing percentiles)') := 'value') %>%
-      print()
-      print(paste0(as_label(enquo(dimension)), ' deciles'))
-      print(thresholds)
+      rename(!!lhsNames( {{ dimension }}, 'range (pxx representing percentiles)') := 'value')
     
   } else {
     stop('Pass numeric dimension and metric variables. Only numeric data permissable.')
