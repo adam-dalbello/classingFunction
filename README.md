@@ -24,7 +24,7 @@ Groups a `dimension` by its own deciles then outputs an aggregate of a `metric`.
 # Arguments
 | Argument | Description |
 | --- | --- |
-| `.data` | A data frame, tibble, matrix, or data table. Will be cast as a tibble internally. |
+| `.data` | A data frame, tibble, matrix, or data table. Will be cast as tibble internally. |
 | `dimension` | The variable/column/field to segment. |
 | `metric` | The variable/column/field distributions will be printed out for. |
 | `na.rm` | Determines if NA values are to be included. By default ignores NA values. |
